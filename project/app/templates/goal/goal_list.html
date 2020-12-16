@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-3">
+    <table class="table">
+        <thead>
+        <tr class="thead-dark">
+            <th>번호</th>
+            <th>목표명</th>
+            <th>작성일시</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if goal_list %}
+        {% for goal in goal_list %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>
+                <a href="{{ url_for('goal.detail', goal_id=goal.id) }}">{{ goal.subject }}</a>
+            </td>
+            <td>{{ goal.create_date }}</td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan="3">존재하는 목표가 없습니다.</td>
+        </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('goal.create') }}" class="btn btn-primary">목표 등록하기</a>
+</div>
+{% endblock %}
