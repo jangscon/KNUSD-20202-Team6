@@ -7,6 +7,7 @@ import config
 db = SQLAlchemy()
 migrate = Migrate()
 
+
 def create_app():
     app = Flask(__name__)
     app.config.from_object(config)
@@ -16,10 +17,10 @@ def create_app():
     migrate.init_app(app, db)
     from . import models
 
-    # bp
-    from .views import main_views, auth_views, mypage_views
+    # 블루프린트
+    from .views import main_views, goal_views, attendance_views
     app.register_blueprint(main_views.bp)
-    app.register_blueprint(auth_views.bp)
-    app.register_blueprint(mypage_views.bp)
+    app.register_blueprint(goal_views.bp)
+    app.register_blueprint(attendance_views.bp)
 
     return app
