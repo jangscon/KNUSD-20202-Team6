@@ -3,9 +3,10 @@
 <div class="container my-3">
     <table class="table">
         <thead>
-        <tr class="thead-dark">
+        <tr class="text-center thead-dark">
             <th>번호</th>
-            <th>목표명</th>
+            <th style="width:50%">목표 </th>
+            <th>작성자</th>
             <th>작성일시</th>
         </tr>
         </thead>
@@ -17,7 +18,8 @@
             <td>
                 <a href="{{ url_for('goal.detail', goal_id=goal.id) }}">{{ goal.subject }}</a>
             </td>
-            <td>{{ goal.create_date }}</td>
+            <td> {{ goal.user.username }}</td>
+            <td>{{ goal.create_date|datetime}}</td>
         </tr>
         {% endfor %}
         {% else %}

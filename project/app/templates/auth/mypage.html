@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-auto mr-auto">.col-auto .mr-auto</div>
+    <div class="col-auto">
+        {% include "form_errors.html" %}
+        <form method="post" class="post-form">
+                    {{ form.csrf_token }}
+            <div class="form-group">
+                <label for="username">사용자 이름</label>
+                <input type="text" class="form-control" name="username" id="username"
+                       value="{{ form.username.data or '' }}">
+            </div>
+        </form>
+        <div class="friend_title">
+            친구 목록
+        </div>
+        <div class="friend_list">
+            <ul>
+                <a>받은 요청</a>
+                {% if friend_list %}
+                    {% for friend in friend_list %}
+                        {% if friend.Type == 0 %}
+                            {% if friend.Related == g.user.id %}
+                                <li>
+                                    <a href="">{{ friend.Relating_name }}</a>
+                                    <a href="{{ url_for('auth.request_accept', relation_id = friend.id)}}" class="btn btn-success">Accept</a>
+                                    <a href="{{ url_for('auth.request_deny', relation_id = friend.id)}}" class="btn btn-danger">Deny</a>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </ul>
+            <ul>
+                {% if friend_list %}
+                    {% for friend in friend_list %}
+                        {% if friend.Type == 1 %}
+                            {% if friend.Related == g.user.id %}
+                                <li>
+                                    <a href="">{{ friend.Relating_name }}</a>
+                                    <a href="{{ url_for('auth.request_delete', relation_id = friend.id)}}" class="btn btn-danger">Deny</a>
+                                </li>
+                            {% elif friend.Relating == g.user.id %}
+                                <li>
+                                    <a href="">{{ friend.Related_name }}</a>
+                                    <a href="{{ url_for('auth.request_delete', relation_id = friend.id)}}" class="btn btn-danger">Deny</a>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </ul>
+            <ul>
+                <a>보낸 요청</a>
+                {% if friend_list %}
+                    {% for friend in friend_list %}
+                        {% if friend.Type == 0 %}
+                            {% if friend.Relating == g.user.id %}
+                                <li>
+                                    <a href="">{{ friend.Related_name }}</a>
+                                    <a href="{{ url_for('auth.request_deny', relation_id = friend.id)}}" class="btn btn-danger">Deny</a>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

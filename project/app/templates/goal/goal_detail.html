@@ -6,10 +6,29 @@
         <div class="card-body">
             <div class="card-text" style="white-space: pre-line;">{{ goal.content }}</div>
             <div class="d-flex justify-content-end">
-                <div class="badge badge-light p-2">
-                    {{ goal.create_date }}
+                <div class="badge badge-light p-2 text-left mx-3">
+                    <div class="mb-2">그룹장</div>
+                    <div>{{ goal.user.username}}</div>
+                </div>
+                {% if goal.modify_date %}
+                <div class="badge badge-light p-2 text-left mx-3">
+                    <div class="mb-2">수정일</div>
+                    <div>{{ goal.modify_date|datetime }}</div>
+                </div>
+                {% endif %}
+                <div class="badge badge-light p-2 text-left mx-3">
+                    <div class="mb-2">생성일</div>
+                    <div>{{ goal.create_date|datetime }}</div>
                 </div>
             </div>
+             {% if g.user == goal.user %}
+        <div class="my-3">
+            <a href="{{ url_for('goal.modify', goal_id=goal.id) }}"
+               class="btn btn-sm btn-outline-secondary">수정</a>
+            <a href="#" class="delete btn btn-sm btn-outline-secondary"
+        data-uri="{{ url_for('goal.delete', goal_id=goal.id) }}">삭제</a>
+        </div>
+        {% endif %}
         </div>
     </div>
     <h5 class="border-bottom my-3 py-2">{{ goal.attendance_set|length }}개의 출석</h5>
@@ -19,7 +38,11 @@
             <div class="card-text" style="white-space: pre-line;">{{ attendance.content }}</div>
             <div class="d-flex justify-content-end">
                 <div class="badge badge-light p-2">
-                    {{ attendance.create_date }}
+                    출석자 :
+                    {{ attendance.user.username}}
+                </div>
+                <div class="badge badge-light p-2">
+                    {{ attendance.create_date|datetime }}
                 </div>
             </div>
         </div>
@@ -35,9 +58,22 @@
         {% endfor %}
         <!-- 오류표시 End -->
         <div class="form-group">
-            <textarea name="content" id="content" class="form-control" rows="10"></textarea>
+           <textarea {% if not g.user %}disabled{% endif %}
+                    name="content" id="content" class="form-control" rows="10"></textarea>
         </div>
         <input type="submit" value="출석하기" class="btn btn-primary">
     </form>
 </div>
+{% endblock %}
+
+{% block script %}
+<script type='text/javascript'>
+$(document).ready(function(){
+    $(".delete").on('click', function() {
+        if(confirm("정말로 삭제하시겠습니까?")) {
+            location.href = $(this).data('uri');
+        }
+    });
+});
+</script>
 {% endblock %}
